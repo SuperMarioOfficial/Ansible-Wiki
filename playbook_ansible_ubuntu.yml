@@ -1,0 +1,65 @@
+```yml
+---
+-
+  hosts: localhost
+  gather_facts: false
+  connection: local
+  become: yes
+
+  tasks:
+  - name: Update apt packages
+    apt:
+      update_cache: "yes"
+      force_apt_get: "yes"
+
+  - name: Install Python
+    raw: apt -y update && sudo apt install -y python3
+    raw: apt install python3-pip -y
+
+  - name: install packages
+    apt:
+      name: "{{ packages }}"
+    vars:
+      packages:
+      - python3-pip
+      - python3-setuptools
+      - python3-wheel
+
+  - name: install docker-tools                                                                                                                                                                                                                   apt:                                                                                                                                                                                                                                           name: "{{ packages }}"                                                                                                                                                                                                                     vars:
+      packages:
+      - apt-transport-https
+      - ca-certificates
+      - curl
+      - gnupg2
+      - software-properties-common
+
+  - name: Add Docker GPG apt Key
+    apt_key:
+      url: https://download.docker.com/linux/ubuntu/gpg
+      state: present
+
+  - name: Add docker repo
+    raw: echo "deb [arch=amd64] https://download.docker.com/linux/debian buster stable" | sudo tee  /etc/apt/sources.list.d/docker.list
+    raw: apt-get update -y
+
+  - name: Update apt packages
+    apt:
+      update_cache: "yes"
+      force_apt_get: "yes"
+
+  - name: install docker
+    apt:
+      name: "{{ packages }}"
+      update_cache: "yes"
+      force_apt_get: "yes"
+    vars:
+      packages:
+      - docker-ce
+      - docker-ce-cli
+      - containerd.io
+  - name: add Docker to sudoers
+    raw: groupadd docker ;  usermod -aG docker $USER ; newgrp docker
+
+
+
+```
