@@ -1,4 +1,4 @@
-```yml
+
 ---
 -
   hosts: localhost
@@ -60,6 +60,3 @@
   - name: add Docker to sudoers
     raw: groupadd docker ;  usermod -aG docker $USER ; newgrp docker
 
-
-
-```
