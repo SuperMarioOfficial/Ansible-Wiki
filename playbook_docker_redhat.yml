@@ -1,0 +1,27 @@
+
+---
+-
+  hosts: localhost
+  connection: local
+  become: yes
+
+  tasks:
+  
+  - name: add utils
+    raw: yum install -y yum-utils 
+
+  - name: Add docker repo
+    raw: yum-config-manager --add-repo  https://download.docker.com/linux/centos/docker-ce.repo
+    raw: yum update -y
+
+  - name: Install Docker
+    raw: yum install docker-ce docker-ce-cli containerd.io
+    
+  - name: add Docker to sudoers
+    raw: groupadd docker ;  usermod -aG docker $USER ; newgrp docker
+    
+  - name: Start Docker
+    raw: systemctl start docker
+    
+
+
